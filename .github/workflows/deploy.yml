@@ -47,6 +47,7 @@ jobs:
         run: npm install -g wasm4
       - name: bundle website
         run: >
+         mkdir -p dist bin &&
          w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}"
          --html dist/index.html
          --windows bin/${{ github.event.repository.name }}-windows.exe
