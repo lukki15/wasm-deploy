@@ -47,10 +47,10 @@ jobs:
         run: npm install -g wasm4
       - name: bundle website
         run: >
-         w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}" \
-         --html dist/index.html \
-         --windows dist/${{ github.event.repository.name }}-windows.exe \
-         --mac dist/${{ github.event.repository.name }}-mac \
+         w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}"
+         --html dist/index.html
+         --windows dist/${{ github.event.repository.name }}-windows.exe
+         --mac dist/${{ github.event.repository.name }}-mac
          --linux dist/${{ github.event.repository.name }}-linux
       
       - name: Upload artifact
