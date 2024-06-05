@@ -49,9 +49,9 @@ jobs:
         run: >
          w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}"
          --html dist/index.html
-         --windows dist/${{ github.event.repository.name }}-windows.exe
-         --mac dist/${{ github.event.repository.name }}-mac
-         --linux dist/${{ github.event.repository.name }}-linux
+         --windows bin/${{ github.event.repository.name }}-windows.exe
+         --mac bin/${{ github.event.repository.name }}-mac
+         --linux bin/${{ github.event.repository.name }}-linux
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -69,3 +69,16 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+  
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    name: Release
+    steps:
+    - name: Release executables
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          bin/${{ github.event.repository.name }}-windows.exe
+          bin/${{ github.event.repository.name }}-mac
+          bin/${{ github.event.repository.name }}-linux
