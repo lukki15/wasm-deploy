@@ -54,10 +54,16 @@ jobs:
          --mac bin/${{ github.event.repository.name }}-mac
          --linux bin/${{ github.event.repository.name }}-linux
       
-      - name: Upload artifact
+      - name: Upload page artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ env.BUILD_PATH }}/dist
+      
+      - name: Upload executables artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: executables-bundles
+          path: bin/*
 
   deploy:
     environment:
@@ -70,15 +76,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-  
-  artifacts:
-    needs: build
-    runs-on: ubuntu-latest
-    name: Artifacts
-    steps:
-    - name: Archive artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: executables-bundles
-        path: bin/*
-
