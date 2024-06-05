@@ -34,15 +34,19 @@ jobs:
 
       - name: get WASI SDK
         run: wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${{ env.WASI_VERSION }}/wasi-sdk-${{ env.WASI_VERSION }}.0-linux.tar.gz && tar xvf wasi-sdk-${{ env.WASI_VERSION }}.0-linux.tar.gz
-        
-      - uses: NiklasEi/wasm-opt-action@v2
+      - run: make
+
+      - name: wasm-opt
+        uses: NiklasEi/wasm-opt-action@v2
         with:
           file: build/cart.wasm
           output: cart-opt.wasm
           options: -Oz --strip-dwarf --strip-producers --zero-filled-memory
 
-      - run: npm install -g wasm4
-      - run: w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}" --html dist/index.html
+      - name: install wasm4
+        run: npm install -g wasm4
+      - name: bundle
+        run: w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}" --html dist/index.html
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
