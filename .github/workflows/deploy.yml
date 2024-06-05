@@ -1,4 +1,4 @@
-name: Deploy WASM-4 to Pages
+name: Deploy WASM-4
 
 on:
   # Runs on pushes targeting the default branch
@@ -45,8 +45,13 @@ jobs:
 
       - name: install wasm4
         run: npm install -g wasm4
-      - name: bundle
-        run: w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}" --html dist/index.html
+      - name: bundle website
+        run: >
+         w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}" \
+         --html dist/index.html \
+         --windows dist/${{ github.event.repository.name }}-windows.exe \
+         --mac dist/${{ github.event.repository.name }}-mac \
+         --linux dist/${{ github.event.repository.name }}-linux
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
