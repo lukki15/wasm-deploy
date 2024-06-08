@@ -21,7 +21,6 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  BUILD_PATH: "./" # default value when not using subfolder
   WASI_VERSION: 22
   WASI_SDK_PATH: ./wasi-sdk-22.0
 
@@ -45,10 +44,11 @@ jobs:
 
       - name: install wasm4
         run: npm install -g wasm4
+      - name: create folders
+        run: mkdir -p bin dist
       - name: bundle website and executables
         run: >
-         mkdir -p bin dist &&
-         w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}"
+         w4 bundle build/cart.wasm --title "${{ github.event.repository.name }}"
          --html dist/index.html
          --windows bin/${{ github.event.repository.name }}-windows.exe
          --mac bin/${{ github.event.repository.name }}-mac
@@ -57,7 +57,7 @@ jobs:
       - name: Upload page artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ env.BUILD_PATH }}/dist
+          path: dist
       
       - name: Upload executables artifacts
         uses: actions/upload-artifact@v4
