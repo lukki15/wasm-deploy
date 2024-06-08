@@ -43,6 +43,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: build
+        run: make
+
       - name: install wasm4
         run: npm install -g wasm4
       - name: create folders
