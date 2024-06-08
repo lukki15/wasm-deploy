@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  BUILD_PATH: "./" # default value when not using subfolders
+  BUILD_PATH: "./" # default value when not using subfolder
   WASI_VERSION: 22
   WASI_SDK_PATH: ./wasi-sdk-22.0
 
@@ -32,20 +32,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: get WASI SDK
-        run: wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${{ env.WASI_VERSION }}/wasi-sdk-${{ env.WASI_VERSION }}.0-linux.tar.gz && tar xvf wasi-sdk-${{ env.WASI_VERSION }}.0-linux.tar.gz
-      - run: make
+      - name: download WASI SDK
+        run: wget https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${{ env.WASI_VERSION }}/wasi-sdk-${{ env.WASI_VERSION }}.0-linux.tar.gz
+      - name: unzip WASI SDK
+        run: tar xvf wasi-sdk-${{ env.WASI_VERSION }}.0-linux.tar.gz
+      
+      - name: install wasm-opt
+        run: sudo apt-get install -y binaryen
 
-      - name: wasm-opt
-        uses: NiklasEi/wasm-opt-action@v2
-        with:
-          file: build/cart.wasm
-          output: cart-opt.wasm
-          options: -Oz --strip-dwarf --strip-producers --zero-filled-memory
+      - name: build
+        run: make
 
       - name: install wasm4
         run: npm install -g wasm4
-      - name: bundle website
+      - name: bundle website and executables
         run: >
          mkdir -p bin dist &&
          w4 bundle cart-opt.wasm --title "${{ github.event.repository.name }}"
@@ -62,7 +62,7 @@ jobs:
       - name: Upload executables artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: executables-bundles
+          name: executables-bundle
           path: bin/*
 
   deploy:
