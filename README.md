@@ -1,6 +1,7 @@
-# wasm4-controller
+# wasm4-deploy
 
-A game written in C++ for the [WASM-4](https://wasm4.org) fantasy console.
+A github action to publish a page and executables for Windows, Mac and Linux.
+For a game written in C++ for the [WASM-4](https://wasm4.org) fantasy console.
 
 ## Building
 
